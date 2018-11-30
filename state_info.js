@@ -1,12 +1,6 @@
-$(document).ready(function() {
-	$('#CO').css('fill', "red");
-});
-
-var stateResponse;
-
 var state_info = {
     'AL': {'lat': 32.3792233, 'lng': -86.3077368, 'capital': 'Montgomery'},
-   /* 'AK': {'lat': 58.3019444, 'lng': -134.4197221, 'capital': 'Juneau'},
+    'AK': {'lat': 58.3019444, 'lng': -134.4197221, 'capital': 'Juneau'},
     'AZ': {'lat': 33.4483771, 'lng': -112.0740373, 'capital': 'Phoenix'},
     'AR': {'lat': 34.7464809, 'lng': -92.28959479999999, 'capital': 'Little Rock'},
     'CA': {'lat': 38.5815719, 'lng': -121.4943996, 'capital': 'Sacramento'},
@@ -53,55 +47,6 @@ var state_info = {
     'VA': {'lat': 37.5407246, 'lng': -77.4360481, 'capital': 'Richmond'},
     'WA': {'lat': 47.0378741, 'lng': -122.9006951, 'capital': 'Olympia'},
     'WV': {'lat': 38.3498195, 'lng': -81.6326234, 'capital': 'Charleston'},
-   */
     'WI': {'lat': 43.0730517, 'lng': -89.4012302, 'capital': 'Madison'},
     'WY': {'lat': 41.1399814, 'lng': -104.8202462, 'capital': 'Cheyenne'}
 };
-
-
-//looping over every object
-					// capital maybe replaced with key
-Object.keys(state_info).forEach(function(capital){
-	//call api based on the long, lat
-var xhr = new XMLHttpRequest();
-xhr.open('GET', "https://api.darksky.net/forecast/16463a6c2036834400dbd76691c4bbb6/32.3792233,-86.3077368", true);
-xhr.send(); //send the actual request
-
-xhr.onreadystatechange = processRequest;
-
-function processRequest(e){
-	if(xhr.readyState == 4 && xhr.status == 200){
-		//data is ready
-		var response = JSON.parse(xhr.responseText);
-		stateResponse = response;
-		console.log(response);
-
-		//color coding
-		if(response.currently.apparentTemperature < -100){
-		$(document).ready(function() {
-			$('#CA').css('fill', "green");
-		});	
-		
-		}
-		else{			
-		$(document).ready(function() {
-			$('#AZ').css('fill', "blue");
-			});
-		}
-
-
-//		alert(response.currently.icon); // correctly access data
-//		response
-	}
-}
-
-
-var value = state_info[capital];
-	console.log(capital, value);
-
-//	var lng = state_info[lng];
-//	var lat = state_info[lat];
-//https://api.darksky.net/forecast/16463a6c2036834400dbd76691c4bbb6/lat,lng
-});
-      
-
