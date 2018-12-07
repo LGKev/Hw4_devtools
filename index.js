@@ -1,12 +1,8 @@
-$(document).ready(function() {
-	$('#CO').css('fill', "red");
-});
-
 var stateResponse;
 
 var state_info = {
     'AL': {'lat': 32.3792233, 'lng': -86.3077368, 'capital': 'Montgomery'},
-   /* 'AK': {'lat': 58.3019444, 'lng': -134.4197221, 'capital': 'Juneau'},
+    'AK': {'lat': 58.3019444, 'lng': -134.4197221, 'capital': 'Juneau'},
     'AZ': {'lat': 33.4483771, 'lng': -112.0740373, 'capital': 'Phoenix'},
     'AR': {'lat': 34.7464809, 'lng': -92.28959479999999, 'capital': 'Little Rock'},
     'CA': {'lat': 38.5815719, 'lng': -121.4943996, 'capital': 'Sacramento'},
@@ -53,7 +49,6 @@ var state_info = {
     'VA': {'lat': 37.5407246, 'lng': -77.4360481, 'capital': 'Richmond'},
     'WA': {'lat': 47.0378741, 'lng': -122.9006951, 'capital': 'Olympia'},
     'WV': {'lat': 38.3498195, 'lng': -81.6326234, 'capital': 'Charleston'},
-   */
     'WI': {'lat': 43.0730517, 'lng': -89.4012302, 'capital': 'Madison'},
     'WY': {'lat': 41.1399814, 'lng': -104.8202462, 'capital': 'Cheyenne'}
 };
@@ -63,8 +58,27 @@ var state_info = {
 					// capital maybe replaced with key
 Object.keys(state_info).forEach(function(capital){
 	//call api based on the long, lat
+
+
+var search_lng = state_info[capital].lng;
+var search_lat = state_info[capital].lat;
+var search_city = state_info[capital];
+var search_state = capital;
+
+
+
+
+//can we print out capital.lat?
+
 var xhr = new XMLHttpRequest();
-xhr.open('GET', "https://api.darksky.net/forecast/16463a6c2036834400dbd76691c4bbb6/32.3792233,-86.3077368", true);
+
+let  search_urlRequest ='https://api.darksky.net/forecast/16463a6c2036834400dbd76691c4bbb6/' +search_lat+','+search_lng;
+//need to append lat and long now, making into a string, var vs let, vs ${},
+//single vs double "quotes" 'quotes', 
+
+
+//xhr.open('GET', "https://api.darksky.net/forecast/16463a6c2036834400dbd76691c4bbb6/search_lat,search_lng", true);
+xhr.open('GET',  search_urlRequest, true);
 xhr.send(); //send the actual request
 
 xhr.onreadystatechange = processRequest;
@@ -74,30 +88,62 @@ function processRequest(e){
 		//data is ready
 		var response = JSON.parse(xhr.responseText);
 		stateResponse = response;
-		console.log(response);
+		console.dir(response);
+
+		var objState = search_state;
+		//var tempF = (response.currently.apparentTemperature * (9/5))  +  32;
+		var tempF = response.currently.apparentTemperature;	
+console.log( "temp: " + tempF + "*F,   search_state: " + search_state + " lat: " + search_lat + "long: " + search_lng + "city: " + search_city);
+
+			//$('#'+objState).css('fill', "blue");
+			// nodejs is weird but kinda neat. like i just glued
+			// these strings together like i guess python?
 
 		//color coding
-		if(response.currently.apparentTemperature < -100){
+		if(tempF <= 10){
+	
+		/* =============================  */	
 		$(document).ready(function() {
-			$('#CA').css('fill', "green");
-		});	
-		
+			$('#'+objState).css('fill', "blue");
+		});
+		/* =============================  */	
+
+		}else if(  tempF <= 30){
+		/* =============================  */	
+		$(document).ready(function() {
+			$('#'+objState).css('fill', "cyan");
+		});
+		/* =============================  */	
+		}else if(tempF <= 50){
+		/* =============================  */	
+		$(document).ready(function() {
+			$('#'+objState).css('fill', "green");
+		});
+		/* =============================  */	
+		}else if(tempF <= 80){
+		/* =============================  */	
+		$(document).ready(function() {
+			$('#'+objState).css('fill', "orange");
+		});
+		/* =============================  */	
+		}else if(tempF > 80){
+		/* =============================  */	
+		$(document).ready(function() {
+			$('#'+objState).css('fill', "red");
+		});
+		/* =============================  */	
 		}
 		else{			
 		$(document).ready(function() {
-			$('#AZ').css('fill', "blue");
+			$('#'+objState).css('fill', "gray");
 			});
 		}
-
-
-//		alert(response.currently.icon); // correctly access data
-//		response
 	}
 }
 
 
-var value = state_info[capital];
-	console.log(capital, value);
+//var value = state_info[capital];
+//console.log(capital, value);
 
 //	var lng = state_info[lng];
 //	var lat = state_info[lat];
